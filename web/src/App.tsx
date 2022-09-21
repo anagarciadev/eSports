@@ -10,6 +10,9 @@ function App() {
     <h1 className="text-6xl text-white font-black m-20 mt-16 ">
       Your <span className='text-transparent bg-nlw-gradient bg-clip-text'>duo</span> is here.
     </h1>
+    <h1 className="text-6xl text-white font-black m-20 mt-16 ">
+      Your <span className='text-transparent bg-nlw-gradient bg-clip-text'>duo</span> is here.
+    </h1>
 
     <div className='grid grid-cols-6 gap-6'>
 
