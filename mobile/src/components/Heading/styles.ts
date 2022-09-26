@@ -4,14 +4,14 @@ import { THEME } from '../../theme';
 export const styles = StyleSheet.create({
   container: {
 
-    width: 1,
-    padding: 12,
+    width: '100%',
+    padding:32,
     
   },
 
   title: {
-    color: THEME.COLORS.TEXT ,
-    fontSize: THEME.FONT_SIZE.LG ,
+    color: THEME.COLORS.TEXT,
+    fontSize: THEME.FONT_SIZE.LG,
     fontFamily: THEME.FONT_FAMILY.BLACK,
   },
 
