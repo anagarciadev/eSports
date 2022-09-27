@@ -1,11 +1,19 @@
 //Importing 'express' and declaring a variable 'e'
 import express from 'express'
+import {PrismaClient} from '@prisma/client'
 
 //declaring a variale 'app' and adressing to the function 'e'
 const app = express();
 
-app.get('/games', (request, response) => {
-    return response.json([])
+const prisma = new PrismaClient({
+    log: ['query']
+    
+});
+
+app.get('/games', async (request, response) => {
+    const games = await prisma.game.findMany()
+
+    return response.json(games)
 })
 
 app.post('/ads', (request, response) => {
