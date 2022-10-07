@@ -1,11 +1,13 @@
 //Components and Properties
 import { Key, useEffect, useState } from 'react';
 import {MagnifyingGlassPlus } from 'phosphor-react';
+import * as Dialog from '@radix-ui/react-dialog';
 
 import './styles/main.css';
 
 import logoImg from './assets/logo-nlw-esports.svg';
 import { GameBanner } from './components/GameBanner';
+import { CreateAdBanner } from './components/CreateAdBanner';
 
 
 interface Game {
@@ -51,22 +53,21 @@ function App() {
       })}
       
     </div>
+    
+    <Dialog.Root>
+      <CreateAdBanner/>
 
-    <div className="pt-1 bg-nlw-gradient self-stretch rounded-lg overflow-hidden mt-8  ">
-      <div className= "bg-[#2A2634] px-8 py-6 flex justify-between items-center"> 
-
-        <div>
-          <strong className="text-2xl text-white font-black block">Have you found your duo yet?</strong>
-          <span className="text-zinc-400">Create an Ad to find new players!</span>
-        </div>
-
-        <button className="px-4 py-3 bg-violet-500 hover:bg-violet-600 text-white rounded-sm flex items-center gap-3">
-          <MagnifyingGlassPlus size={24}/>
-          Create an Ad
-          </button>
-
-      </div>
-    </div>
+      <Dialog.Portal>
+        <Dialog.Overlay/>
+        <Dialog.Content>
+          <Dialog.Title>Create an Ad</Dialog.Title> 
+          <Dialog.Content>
+            Create an Ad
+          </Dialog.Content>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  
 
   </div>
   )
