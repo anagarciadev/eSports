@@ -1,5 +1,5 @@
 //Components and Properties
-import { useEffect, useState } from 'react';
+import { Key, useEffect, useState } from 'react';
 import {MagnifyingGlassPlus } from 'phosphor-react';
 
 import './styles/main.css';
@@ -7,10 +7,11 @@ import './styles/main.css';
 import logoImg from './assets/logo-nlw-esports.svg';
 import { GameBanner } from './components/GameBanner';
 
+
 interface Game {
-  id: String;
-  title: String;
-  bannerUrl: String;
+  id: string;
+  title: string;
+  bannerUrl: string;
   _count: {
     ads: number;
 
@@ -41,6 +42,7 @@ function App() {
       {games.map(game => {
         return (
           <GameBanner 
+            key = {game.id}
             bannerUrl={game.bannerUrl} 
             title={game.title} 
             adsCount={game._count.ads}
