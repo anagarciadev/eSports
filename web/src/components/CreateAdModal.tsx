@@ -5,7 +5,10 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 
 import { Input } from "./Form/input";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import axios from 'axios';
+
+
 
 interface Game {
     id: string;
@@ -16,16 +19,43 @@ export function CreateAdModal() {
 
     const [games, setGames] = useState<Game[]>([])
     const [weekDays, setWeekDays ] = useState<string[]>([])
-
-    console.log(weekDays)
+    const [useVoiceChannel, setUseVoiceChannel] = useState(false)
     
     useEffect (() => {
-        fetch ('http://localhost:3333/games')
-            .then(response => response.json())
-            .then (data => {
-              setGames(data)
-            })
+        axios ('http://localhost:3333/games') .then(response => {
+            setGames(response.data)
+        })
       }, [])
+
+      async function handleCreateAd(event: FormEvent) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target as HTMLFormElement)
+        const data = Object.fromEntries (formData)
+
+        if (!data.name) {
+            return;
+        }
+
+        try {
+            await axios.post (`http://localhost:3333/games/${data.game}/ads`, {
+                name: data.name,
+                yearsPlaying: Number(data.yearsPlaying),
+                discord: data.discord,
+                weekDays: weekDays.map (Number),
+                hourStart: data.hourStart,
+                hourEnd: data.hourEnd,
+                useVoiceChannel: useVoiceChannel,
+            })
+
+            alert('Success! Your Ad has been created.')
+        } catch (err) {
+            console.log(err);
+            alert ('Error! The Ad was not submited.')
+
+        }
+ 
+      }
     
 
     return (
@@ -36,11 +66,12 @@ export function CreateAdModal() {
             <Dialog.Title className='text-3xl font-black'>Create an Ad</Dialog.Title> 
             
             
-                <form className='mt-8 flex flex-col gap-4'>
+                <form onSubmit={handleCreateAd} className='mt-8 flex flex-col gap-4'>
 
                 <div className='flex flex-col gap-2'>
                     <label htmlFor='game' className='font-semibold'>Which game?</label>
                     <select 
+                        name="game"
                         id='game' 
                         className= 'bg-zinc-900 py-3 px-4 rounded text-sm placeholder: text-zinc-500 appearance-none'
                         defaultValue=''
@@ -55,19 +86,19 @@ export function CreateAdModal() {
 
                 <div className='flex flex-col gap-2'>
                     <label htmlFor='name'>Your name or nickname</label>
-                    <Input id='name' placeholder='How other gamers call you when you play?' />
+                    <Input name='name' id='name' placeholder='How other gamers call you when you play?' />
                 </div>
 
                 <div className='grid grid-cols-2 gap-6' >
 
                     <div className='flex flex-col gap-2'>
                     <label htmlFor='yearsPlaying'>How long do you play?</label>
-                    <Input id='yearsPlaying' type='number' placeholder='0 years or more' />
+                    <Input name='yearsPlaying' id='yearsPlaying' type='number' placeholder='0 years or more' />
                     </div>
 
                     <div className='flex flex-col gap-2'>
                     <label htmlFor='discord'>What is your Discord?</label>
-                    <Input id='discord' type='tesxt' placeholder='User#0000' />
+                    <Input name='discord' id='discord' type='tesxt' placeholder='User#0000' />
                     </div>
 
                 </div>
@@ -139,9 +170,9 @@ export function CreateAdModal() {
                     <div className='flex flex-col gap-1'>
                     <label htmlFor='hourStart'>At what time?</label>
                     <div className='grid grid-cols-2 gap-4 '>
-                        <Input id='hourStart' type='time' placeholder='From'></Input> 
+                        <Input name='hourStart' id='hourStart' type='time' placeholder='From'></Input> 
 
-                        <Input id='hourEnd' type='time' placeholder='To'></Input> 
+                        <Input name='hourEnd' id='hourEnd' type='time' placeholder='To'></Input> 
 
                     </div>
                     </div>
@@ -149,7 +180,17 @@ export function CreateAdModal() {
                 </div>
 
                 <label className='mt-2 flex gap-2 text-sm items-center '>
-                    <Checkbox.Root className='w-6 h-6 rounded bg-zinc-900 p-1  '>
+                    <Checkbox.Root 
+                        checked={useVoiceChannel}
+                        onCheckedChange={(checked) => {
+                            if (checked === true ) {
+                                setUseVoiceChannel(true)
+                            } else {
+                                setUseVoiceChannel(false)
+                            }
+                        }}
+                        className='w-6 h-6 rounded bg-zinc-900 p-1'
+                    >
                         <Checkbox.Indicator>
                             < Check className="w-4 h-4 text-emerald-400"/>
                         </Checkbox.Indicator>
