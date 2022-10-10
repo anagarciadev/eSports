@@ -14,12 +14,12 @@ import { GameParams } from '../../@types/navigation';
 import { DuoCard, DuoCardProps } from '../../components/DuoCard';
 import { Heading } from '../../components/Heading';
 import { Background } from '../../components/Background';
-import { Inter_500Medium } from '@expo-google-fonts/inter';
-
+import { DuoMatch } from '../../components/DuoMatch';
 
 export function Game() {
 
   const [duos, setDuos] = useState<DuoCardProps[]>([]);
+  const [discordDuoSelected, setDiscordDuoSelected] = useState ('ana #1212') ;
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -86,6 +86,12 @@ export function Game() {
               No Ads published
             </Text>
           ) }
+        />
+
+        <DuoMatch
+          visible={discordDuoSelected.length > 0}
+          discord="ana #1212"
+          onClose={() => setDiscordDuoSelected ('')}
         />
 
 
